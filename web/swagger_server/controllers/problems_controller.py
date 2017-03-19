@@ -55,7 +55,7 @@ def add_problem(problem):
       
         result = Firebase.put('/problems', 'id_' + str(problem_id), problem )
       
-        return jsonify({"id": problem_id}), status.HTTP_201_CREATED
+        return jsonify({"uid": problem_id}), status.HTTP_201_CREATED
     except ValueError:
         return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
 
