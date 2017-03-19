@@ -19,7 +19,9 @@ def add_problem(problem):
 
     :rtype: int
     """
+    print("before if")
     if connexion.request.is_json:
+        print("after if")
         problem = Problem.from_dict(connexion.request.get_json())
         #get and update the largest id
         largest_id = -1
@@ -45,6 +47,7 @@ def get_problems():
 
     :rtype: List[Problem]
     """
+    print("hello worl")
     Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
     result = Firebase.get('/problems', None)
     if result is None:
