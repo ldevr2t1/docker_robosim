@@ -20,6 +20,7 @@ Run the command `docker run -p 50:50 -d [name_of_image]`. where `[name_of_image]
 ## How to Stop the Docker Container ##
 Run the command `docker stop [id]`, where `[id]` is the generated id number of your container. If you do not know what your container id is, use the command `docker ps` to view all running containers.
 
-### Author ###
+### Authors ###
 
+* Joshua Chung
 * David Gwizdala
