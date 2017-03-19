@@ -60,8 +60,9 @@ def update_problem(problem_id, problem):
     Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
     result = Firebase.get('/problems', 'id_' + str(problem_id))
     
-    if connexion.request.is_json and result is not None:
-        problem = Problem.from_dict(connexion.request.get_json())
-        return jsonify(Firebase.put('/problems', 'id_' + str(problem_id), problem))
-    else:
+    try:
+        if result is not None:
+        	problem = Problem.from_dict(connexion.request.get_json())
+        	return jsonify(Firebase.put('/problems', 'id_' + str(problem_id), problem))
+    except ValueError:
       return jsonify(Error(404, "Problem not found")), status.HTTP_404_NOT_FOUND

@@ -9,18 +9,9 @@ import json
 from flask import jsonify
 from flask_api import status
 from firebase import firebase
-
-def add_problem(problem):
-    """
-    Creates a new problem and returns a problemID
-    
-    :param problem: Problem object that needs to be updated.
-    :type problem: dict | bytes
-
-    :rtype: int
-    """
-    print("before if")
-    if connexion.request.is_json:
+"""
+ORIGINAL CODE:
+ if connexion.request.is_json:
         print("after if")
         problem = Problem.from_dict(connexion.request.get_json())
         #get and update the largest id
@@ -37,6 +28,35 @@ def add_problem(problem):
       
         return jsonify(problem_id), status.HTTP_201_CREATED
     else:
+        return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+"""
+def add_problem(problem):
+    """
+    Creates a new problem and returns a problemID
+    
+    :param problem: Problem object that needs to be updated.
+    :type problem: dict | bytes
+
+    :rtype: int
+    """
+    try:
+        str_body = str(problem).replace('\'', '\"')
+        #json.loads(str_body)
+        problem = Problem.from_dict(connexion.request.get_json())
+        #get and update the largest id
+        largest_id = -1
+        Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
+        result = Firebase.get('/maxNum', None)
+        if result is not None:
+          largest_id = result
+        problem_id = largest_id + 1
+        
+        Firebase.put('/', 'maxNum', problem_id)
+      
+        result = Firebase.put('/problems', 'id_' + str(problem_id), problem )
+      
+        return jsonify({"id": problem_id}), status.HTTP_201_CREATED
+    except ValueError:
         return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
 
 

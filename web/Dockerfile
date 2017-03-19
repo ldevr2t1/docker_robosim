@@ -13,6 +13,7 @@ RUN pip3 install Flask-API
 RUN pip install Flask-API
 RUN pip3 install flask
 RUN pip3 install markdown
+RUN pip install requests==1.1.0
 RUN pip install python-firebase
 
 #download pymongo
