@@ -18,7 +18,7 @@ This is Team 1's Assignment 6 for ECE 4574 at Virginia Tech
 1. go ahead and gitclone this repo
 `git clone https://github.com/ldevr2t1/docker_robosim.git`
 2. navigate into the web directory (i.e. cd web)
-3. run docker commands to get server running
+3. run docker commands to get server running - may have to **sudo**
     * `docker-compose build`
     * `docker-compose run`
 
