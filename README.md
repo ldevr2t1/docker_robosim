@@ -3,7 +3,7 @@ This is Team 1's Assignment 6 for ECE 4574 at Virginia Tech
 
 ## Accessing the Website/Server ui
 
-**Go to this link** [**Database Server Link**](<http://ec2-54-202-25-115.us-west-2.compute.amazonaws.com:8080/v1/ui/>)
+**To access Existing EC2 Server Go to this link** [**Database Server Link**](<http://ec2-54-202-25-115.us-west-2.compute.amazonaws.com:8080/v1/ui/>)
 
 ### What is this repository for? ###
 
@@ -14,13 +14,20 @@ This is Team 1's Assignment 6 for ECE 4574 at Virginia Tech
 * Docker is installed
 * Your device is connected to the internet (to clone the repository and download required libraries)
 
-## How to Generate the Docker container ##
+## How to Generate the Docker container and run Locally ##
 1. go ahead and gitclone this repo
 `git clone https://github.com/ldevr2t1/docker_robosim.git`
-2. navigate into the web directory (i.e. cd web)
-3. run docker commands to get server running - may have to **sudo**
+2. Run **git checkout local**
+3. Navigate into the web directory (i.e. cd web)
+4. run docker commands to get server running - may have to **sudo**
     * `docker-compose build`
     * `docker-compose run`
+5. Access your machine-ip address (docker-machine ip) in your web browser
+    * `The UI should be viewable at **192.168.99.100/v1/ui**`
+6.  If you cannot access the UI then change the **'host'** address in the **swagger.yaml** file
+    * **To get Machine ip address:** `Run docker-machine ip` 
+    * **Update swagger.yaml:** `host: "<Machine Ip-Address>"`
+    * Repeat steps 4 and 5
 
 ## How to Stop the Docker Container ##
 Run the command `docker stop [id]`, where `[id]` is the generated id number of your container. If you do not know what your container id is, use the command `docker ps` to view all running containers.
@@ -42,17 +49,6 @@ Run the command `docker stop [id]`, where `[id]` is the generated id number of y
 3. Change the **Dockerfile** (i.e. change the EXPOSE #)
     * `#Expose port # for testing`
     -`    EXPOSE <port_number>`
-
-## NOTE
-### If you want to test locally (i.e. localhost)
-1. Set **__main__.py** **'host'** parameter to **'0.0.0.0'**
-	- **In __main__.py:** `app.run(host='<your_address>', port=<port_number>)`
-
-2. Set **swagger.yaml** file's **host:** to your docker-machine's IP-Address
-	- `Run **Docker-machine ip** to get Ip-Address`
-	- **In swagger.yaml:** `host: "<your_address>:<port_number>"`
-3. Set your port_numbers accordingly (i.e. follow instructions for port number [above])
-
 
 ### Authors ###
 
