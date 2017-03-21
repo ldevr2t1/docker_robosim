@@ -147,3 +147,19 @@ def _deserialize_dict(data, boxed_type):
     """
     return {k: _deserialize(v, boxed_type)
             for k, v in iteritems(data)}
+
+def create_json(pid, ver, body):
+    #gotta check if the body is valid jsonc
+    return jsonify({"problem_id":str(pid), "version":str(ver), "body":str(body)})
+
+
+def insert_json(pid, ver, body):
+    db.posts.insert_one({"problem_id":str(pid), "version":str(ver), "body":body})
+
+
+def get_status(status, message):
+    return jsonify({"Status": status, "Message": message})
+
+
+def root_get():
+    return 'This is version 2.0'            
