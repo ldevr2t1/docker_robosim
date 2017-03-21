@@ -48,7 +48,7 @@ def get_problem_all_versions(problem_id):
     :rtype: Problem
     """
     array = []
-    for post in db.posts.find({'problem_id':problem_id})
+    for post in db.posts.find({'problem_id': str(problem_id)}, {'version': 1, 'body': 1})
         array.append(post)
     if (len(array) == 0):
         return jsonify(Error(404, "Problem not found")), status.HTTP_404_NOT_FOUND
