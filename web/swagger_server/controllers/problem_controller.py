@@ -53,7 +53,7 @@ def get_problem(problem_id, version):
         return jsonify(problem)
 
 
-def get_problem_all_versions(problem_id):
+def getall_problem(problem_id):
     """
     Problems
     Returns all problem versions for a specific problem 

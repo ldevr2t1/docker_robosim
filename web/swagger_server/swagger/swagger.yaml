@@ -69,7 +69,7 @@ paths:
       - "Problem"
       summary: "Problems"
       description: "Returns all problem versions for a specific problem\n"
-      operationId: "get_problem_all_versions"
+      operationId: "getall_problem"
       produces:
       - "application/json"
       - "application/xml"
