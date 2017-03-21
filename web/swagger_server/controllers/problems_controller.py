@@ -1,18 +1,7 @@
-import connexion, pymongo, json
-from swagger_server.models.error import Error
-from swagger_server.models.problem import Problem
-from datetime import date, datetime
-from typing import List, Dict
-from six import iteritems
-from ..util import deserialize_date, deserialize_datetime
-from flask_api import status
-from pymongo import MongoClient
-from flask import jsonify
-from flask_api import status
+from utilities import *
 
-client = MongoClient()
-db = client.pdb
-posts = db.posts
+client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'],27017)
+db = client.path_db
 
 def add_problem(problem):
     """
@@ -23,9 +12,22 @@ def add_problem(problem):
 
     :rtype: int
     """
-    if connexion.request.is_json:
+    #find largest pid
+    try:
+        str_body = str(problem).replace('\'', '\"')
         problem = Problem.from_dict(connexion.request.get_json())
-    return 'do some magic!'
+        pid = db.posts.find({}, {'problem_id': 1}).sort({'problem_id': -1}).limit(1)
+
+        if pid is not None:
+            pid = int(pid) + 1
+        else:
+            pid = 0
+
+        insert_json(pid, 0, problem)
+        return jsonify({"problem_id": pid}), status.HTTP_201_CREATED  
+    except ValueError:
+        return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+
 
 
 def get_problems():
@@ -36,7 +38,7 @@ def get_problems():
     :rtype: List[int]
     """
     array = []
-    for post in posts.find():
+    for post in db.posts.find({},{"problem_id":1}):
         array.append(post)
     if (len(array) == 0):
         return jsonify(Error(404, "No problems in database")), status.HTTP_404_NOT_FOUND

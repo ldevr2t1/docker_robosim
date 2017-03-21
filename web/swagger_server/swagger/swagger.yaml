@@ -90,12 +90,15 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "swagger_server.controllers.problem_controller"
-    delete:
+    put:
       tags:
       - "Problem"
-      summary: "Delete Problem"
-      description: "This removes the problem by the given ID and version"
-      operationId: "delete_problem_all_versions"
+      summary: "Update the existing problem"
+      description: ""
+      operationId: "update_problem"
+      consumes:
+      - "application/json"
+      - "application/xml"
       produces:
       - "application/json"
       - "application/xml"
@@ -106,12 +109,23 @@ paths:
         required: true
         type: "integer"
         format: "int32"
+      - in: "body"
+        name: "problem"
+        description: "Problem object that needs to be updated."
+        required: true
+        schema:
+          $ref: "#/definitions/Problem"
       responses:
-        400:
-          description: "Invalid ID supplied"
+        200:
+          description: "The new version number for the problem"
+          schema:
+            type: "integer"
+            format: "int32"
         404:
           description: "Problem not found"
-      x-swagger-router-controller: "swagger_server.controllers.problem_controller"
+        405:
+          description: "Validation exception"
+      x-swagger-router-controller: "swagger_server.controllers.problem_controller"      
   /id={problem_id}/ver={version}/:
     get:
       tags:
@@ -144,48 +158,6 @@ paths:
           description: "Unexpected error"
           schema:
             $ref: "#/definitions/Error"
-      x-swagger-router-controller: "swagger_server.controllers.problem_controller"
-    put:
-      tags:
-      - "Problem"
-      summary: "Update the existing problem"
-      description: ""
-      operationId: "update_problem"
-      consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/json"
-      - "application/xml"
-      parameters:
-      - name: "problem_id"
-        in: "path"
-        description: "The id of the problem being manipulated"
-        required: true
-        type: "integer"
-        format: "int32"
-      - name: "version"
-        in: "path"
-        description: "The version of the problem being manipulated"
-        required: true
-        type: "integer"
-        format: "int32"
-      - in: "body"
-        name: "problem"
-        description: "Problem object that needs to be updated."
-        required: true
-        schema:
-          $ref: "#/definitions/Problem"
-      responses:
-        200:
-          description: "The new version number for the problem"
-          schema:
-            type: "integer"
-            format: "int32"
-        404:
-          description: "Problem not found"
-        405:
-          description: "Validation exception"
       x-swagger-router-controller: "swagger_server.controllers.problem_controller"
     delete:
       tags:
