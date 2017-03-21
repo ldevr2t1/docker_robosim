@@ -1,4 +1,4 @@
-from utilities import *
+from . import utilities
 
 client = MongoClient(os.environ['DB_PORT_27017_TCP_ADDR'],27017)
 db = client.path_db
