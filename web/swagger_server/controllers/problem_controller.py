@@ -86,25 +86,19 @@ def update_problem(problem_id, problem):
     """
     #if the problem exists, generate a new object and submit the values under a new version
     try:
-        if connexion.request.is_json:
-            body = GenericObject.from_dict(connexion.request.get_json())
+        problem = Problem.from_dict(connexion.request.get_json())
 
-            if db.posts.find_one({'problem_id':problem_id, 'version': version}, {'body':1}) is None:
-                return get_status(404, "Problem not found"), status.HTTP_404_NOT_FOUND
-            else:
-                version = db.posts.find({}, {'version': 1}).sort({'version': -1}).limit(1)
-
-                if version is not None:
-                    version = int(version) + 1
-                else:
-                    version = 0
-
-                str_body = str(problem).replace('\'', '\"')
-                problem = Problem.from_dict(connexion.request.get_json())
-
-                insert_json(problem_id, version, problem)
-                return jsonify({"version": version})   
+        if db.posts.find_one({'problem_id':problem_id, 'version': version}, {'body':1}) is None:
+            return get_status(404, "Problem not found"), status.HTTP_404_NOT_FOUND
         else:
-            return get_status(405, "Validation Error - Invalid JSON")
+            version = db.posts.find({}, {'version': 1}).sort({'version': -1}).limit(1)
+
+            if version is not None:
+                version = int(version) + 1
+            else:
+                version = 0
+
+            insert_json(problem_id, version, problem)
+            return jsonify({"version": version})   
     except ValueError:
         return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
