@@ -1,5 +1,5 @@
 FROM ubuntu:latest
-MAINTAINER Rajdeep Dua "dua_rajdeep@yahoo.com"
+MAINTAINER David Gwizdala
 RUN apt-get update && apt-get install -y \
 	git \
 	python3.4 \

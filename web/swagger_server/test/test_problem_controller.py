@@ -18,7 +18,17 @@ class TestProblemController(BaseTestCase):
 
         Delete Problem
         """
-        response = self.client.open('/v1/id&#x3D;{problem_id}/'.format(problem_id=56),
+        response = self.client.open('/v2/id&#x3D;{problem_id}/ver&#x3D;{version}/'.format(problem_id=56, version=56),
+                                    method='DELETE')
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_delete_problem_all_versions(self):
+        """
+        Test case for delete_problem_all_versions
+
+        Delete Problem
+        """
+        response = self.client.open('/v2/id&#x3D;{problem_id}/'.format(problem_id=56),
                                     method='DELETE')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -28,7 +38,17 @@ class TestProblemController(BaseTestCase):
 
         Problems
         """
-        response = self.client.open('/v1/id&#x3D;{problem_id}/'.format(problem_id=56),
+        response = self.client.open('/v2/id&#x3D;{problem_id}/ver&#x3D;{version}/'.format(problem_id=56, version=56),
+                                    method='GET')
+        self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
+
+    def test_get_problem_all_versions(self):
+        """
+        Test case for get_problem_all_versions
+
+        Problems
+        """
+        response = self.client.open('/v2/id&#x3D;{problem_id}/'.format(problem_id=56),
                                     method='GET')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
@@ -39,7 +59,7 @@ class TestProblemController(BaseTestCase):
         Update the existing problem
         """
         problem = Problem()
-        response = self.client.open('/v1/id&#x3D;{problem_id}/'.format(problem_id=56),
+        response = self.client.open('/v2/id&#x3D;{problem_id}/ver&#x3D;{version}/'.format(problem_id=56, version=56),
                                     method='PUT',
                                     data=json.dumps(problem),
                                     content_type='application/json')

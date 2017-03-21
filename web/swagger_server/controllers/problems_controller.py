@@ -1,63 +1,31 @@
-import connexion
+import connexion, pymongo, json
 from swagger_server.models.error import Error
 from swagger_server.models.problem import Problem
 from datetime import date, datetime
 from typing import List, Dict
 from six import iteritems
 from ..util import deserialize_date, deserialize_datetime
-import json
+from flask_api import status
+from pymongo import MongoClient
 from flask import jsonify
 from flask_api import status
-from firebase import firebase
-"""
-ORIGINAL CODE:
- if connexion.request.is_json:
-        print("after if")
-        problem = Problem.from_dict(connexion.request.get_json())
-        #get and update the largest id
-        largest_id = -1
-        Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
-        result = Firebase.get('/maxNum', None)
-        if result is not None:
-          largest_id = result
-        problem_id = largest_id + 1
-        
-        Firebase.put('/', 'maxNum', problem_id)
-      
-        result = Firebase.put('/problems', 'id_' + str(problem_id), problem )
-      
-        return jsonify(problem_id), status.HTTP_201_CREATED
-    else:
-        return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-"""
+
+client = MongoClient()
+db = client.pdb
+posts = db.posts
+
 def add_problem(problem):
     """
-    Creates a new problem and returns a problemID
+    Creates a new problem and returns a problemID with default version 0
     
     :param problem: Problem object that needs to be updated.
     :type problem: dict | bytes
 
     :rtype: int
     """
-    try:
-        str_body = str(problem).replace('\'', '\"')
-        #json.loads(str_body)
+    if connexion.request.is_json:
         problem = Problem.from_dict(connexion.request.get_json())
-        #get and update the largest id
-        largest_id = -1
-        Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
-        result = Firebase.get('/maxNum', None)
-        if result is not None:
-          largest_id = result
-        problem_id = largest_id + 1
-        
-        Firebase.put('/', 'maxNum', problem_id)
-      
-        result = Firebase.put('/problems', 'id_' + str(problem_id), problem )
-      
-        return jsonify({"uid": problem_id}), status.HTTP_201_CREATED
-    except ValueError:
-        return jsonify(Error(415,"Unsupported media type: Please submit data as application/json data")), status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
+    return 'do some magic!'
 
 
 def get_problems():
@@ -65,12 +33,11 @@ def get_problems():
     Problems
     Returns a list of all of the Problems generated. This can be an empty list. 
 
-    :rtype: List[Problem]
+    :rtype: List[int]
     """
-    print("hello worl")
-    Firebase = firebase.FirebaseApplication('https://team1robotsim.firebaseio.com/', None)
-    result = Firebase.get('/problems', None)
-    if result is None:
-        return jsonify({})
-    else:
-        return jsonify(result)
+    array = []
+    for post in posts.find():
+        array.append(post)
+    if (len(array) == 0):
+        return jsonify(Error(404, "No problems in database")), status.HTTP_404_NOT_FOUND
+    return jsonify(array)

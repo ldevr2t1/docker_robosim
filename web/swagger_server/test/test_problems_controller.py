@@ -16,10 +16,10 @@ class TestProblemsController(BaseTestCase):
         """
         Test case for add_problem
 
-        Creates a new problem and returns a problemID
+        Creates a new problem and returns a problemID with default version 0
         """
         problem = Problem()
-        response = self.client.open('/v1/',
+        response = self.client.open('/v2/',
                                     method='POST',
                                     data=json.dumps(problem),
                                     content_type='application/json')
@@ -31,7 +31,7 @@ class TestProblemsController(BaseTestCase):
 
         Problems
         """
-        response = self.client.open('/v1/',
+        response = self.client.open('/v2/',
                                     method='GET')
         self.assert200(response, "Response body is : " + response.data.decode('utf-8'))
 
