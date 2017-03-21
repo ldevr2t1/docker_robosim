@@ -14,11 +14,10 @@ RUN pip install Flask-API
 RUN pip3 install flask
 RUN pip3 install markdown
 RUN pip install requests==1.1.0
-RUN pip install python-firebase
 
 #download pymongo
-#RUN apt-get install -y mongodb
-#RUN pip install pymongo
+RUN apt-get install -y mongodb
+RUN pip install pymongo
 
 COPY . /app
 WORKDIR /app
